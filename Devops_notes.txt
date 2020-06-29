@@ -1,0 +1,92 @@
+Devops
+    - Appl.과 서비스를 빠른 속도로 제공할 수 있도록 조직의 역량을 향상시키는 문화 철학 / 방식 및 도구의 조합
+    - SW 개발 사이클의 속도를 높여 제품을 더 빠르게 혁신하고 개선할 수 있음
+    - CAMS 핵심 요소 필요 (Culture, Automation, Measurement, Sharing)
+    * Delivery Pipeline : Build → Test → Release ↘ 
+      Feedback loop     : Plan  ←    Monitoring  ↙ 
+    
+    >> 소규모 업데이트를 자주 수행
+    >> 마이크로 서비스 아키텍처를 사용하여 애플리케이션의 유연성을 확보
+
+    Appl.의 변화
+        Monolithic: 단일 리소스에 모든 기능을 구현 / 각 기능이 서로 밀결합 되어 있어 서로의 종속성이 높음 
+                            ↓
+        Microservice: 기능별로 리소스가 분산 / 서로의 종속성이 낮음 / 
+                      리소스의 파편화로 자동화 및 협업툴을 통하지 않으면 운영의 어려움이 발생할 가능성
+
+    Devops 고려 사항
+        - 컴퓨팅 리소스의 탄력적 운영   : 코드 형태의 인프라 구성 및 형상 관리
+        - 빈번한 SW 빌드 및 릴리즈 운영 : CI / CD (Continuous Integration / Continuous Delivery) 환경 구성
+        - 인프라 및 Appl. 성능 추적 및 대응: 모니터링 및 로깅의 표준화 / 고도화
+        - 중복 발생 업무 제거/협업 강화 : Agile / 협업 툴을 활용한 업무 협력 강화 및 투명화 (조직/문화)
+
+    Devops 모델
+        1. Code     - 순수 개발 단계 (개발자들이 coding하는 단계)
+        2. Build    - binary로 전환하는 단계 (기계가 이해를 해야 함)
+        3. Test     - 기능 / 성능 / 보안 등 요구사항을 만족하는 지를 평가하는 단계 (QA)
+        4. Deploy   - 배포를 하는 단계 중, 서비스를 구성하기 위한 Infra 구성을 진행하기 위한 Code를 배포하는 단계
+        5. Release  - 배포를 하는 단계 중, 서비스를 구성하기 위한 SW/Appl. 구성을 진행하기 위한 Code를 배포하는 단계
+        6. Monitor  - Open한 서비스가 정상인지 여부를 확인하는 단계
+    
+    Code / Build 관련 용어
+        - 소스(Source) : 개발 Code
+        - 컴파일(Compile) : 소스 코드를 분석해 기계어(binary Code)로 번역
+        - 빌드(Build) : binary Code와 Asset(Library, HTML, Image 등)들을 모아 실행 가능한 상태로 만드는 것
+        - 아티팩트(Artifact) : 배포 가능한 형태의 컴파일 또는 빌드 된 소스 코드
+        - 저장소(Repository) : 아티팩트(패키지) 들을 배포하기 위한 저장소
+
+    Test 관련 용어 - 개발된 코드 기능을 테스트 또는 전체 서비스의 기능을 테스트 하는 단계
+        - Unit 테스트 : 각 기능별로 동작 유무를 확인할 수 있는 custom script
+        - Integration 테스트 : Unit 테스트의 묶음 혹은 전체 서비스 동작 유무를 확인 할 수 있는 custom script
+        - Load 테스트 : 네트워크 레벨의 부하를 일으켜 평균 응답 시간 / TPS(Transaction Per Second) 측정
+                        Loadrunner, JMeter 활용
+    
+    DevOps 모델 구성 요소(Deploy, Release)
+        - resource 생성/삭제: CloudFormation, Terraform
+        - resource 형상관리:  Ansible, Chef, SaltStack, Puppet
+        - Release (Artifact 배포): Jenkins, Bamboo, GoCD
+    
+    배포 Pipeline
+        - 배포용도 push 후 테스트, 테스트, 테스트, 테스트... 각 종 단계의 테스트 완료 후 정식 Release (운영기 배포)
+    
+    모니터 (Monitor): 인프라, 어플리케이션의 시스템과 서비스 레벨의 지표와 로그를 모니터링 하여 개선 사항을 도출 하는 단계
+        - 인프라 모니터링: Grafana, InfluxDB, Sensu, Nagios, Zabbix
+        - APM: Jennifer, Pinpoint, New Relic
+        - Logging: ElasticSearch, FluentD, LogD, Splunk
+    
+    * 각 Devops 단계별 연관 Tool 파악하는 것이 매우 중요!!! 그 후 pipepine 구성하는 것이 필요
+
+    CI / CD 
+        - CI (지속적 통합, Continuous Integration)
+            : 빌드/ 통합 단계
+            : 빌드 및 테스트가 수행된 후 개발자가 코드 변경을 중앙 레포지토리에 정기적으로 통합하는 소프트웨어 개발 방식
+            : 버그를 신속하게 찾아 해결 하고, 소프트웨어 품질을 높이고, 업데이트 검증 및 릴리즈 시간을 단축하는 것이 목적
+        - CD (지속적 전달, Continuous Delivery)
+            : 상용 환경으로 릴리즈 하기 위한 코드 변경이 자동으로 빌드, 테스트 및 준비 되는 소프트웨어 개발 방식
+            : 빌드 단계 이후 모든 코드 변경을 개발 환경 및 상용환경에 배포 (지속적 통합의 확장)
+        
+        - 지속적 배포
+            : 전체적인 소프트웨어 릴리즈 절차가 자동화 되어 명시적인 승인없이 자동으로 상용환경에 배포되는 소프트웨어 개발 방식
+
+    QA 자동화
+        - Spinnaker / GoCD 등 활용 (Dashboard를 통해 진척 사항 확인)
+    
+    무중단 배포 전략
+        - Blue / Green 배포
+            : 새로운 소스 코드 버전을 포함한 환경(Green)를 코드형 인프라 구성을 통해 손쉽게 인프라 배포후 앞단 도메인 혹은 네트워크 장비에서 기존 버전(Blue) 에서 새로운 환경으로 트레픽을 seamless 하게 서비스 업데이트
+
+    Scrum
+        - 협업 도구를 활용한 문화 강화 (ex. Jira)
+            : Scrum Master - 스크럼 주최 및 사회자 역할
+            : Produce Owner - 서비스 별 요구 사항에 대한 의사결정 역할
+            : Team Member - 업무 수행 인력
+        - 칸반 차트 단계 (ex. Jira)
+            : Backlog - PO가 개발팀으로부터 받아온 요구사항 혹은 안정화, 성능 향상을 위해 해결 해야하는 이슈,
+                        서비스데스크로부터 요청 등에 대한 일감을 모두 입력 및 수행 대기.(일감의 최대 개수 없음)
+            : Planned - Backlog에 있는 일감 중 시작 해야 하는 일에 대해 Planned 상태로 변경
+                        (팀원에 비례하여 최대 일감개수 협의 산정)
+            : InWork - 현재 진행중인 업무(최대 진행중인 일감 개수는 인원에 맞춰서 정의)
+            : Done - 완료된 업무
+    
+
+    GCP 리소스 배포를 위한 설정 및 형상의 묶음을 YAML, Jinja, Python 형태로 구성
